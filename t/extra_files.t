@@ -7,7 +7,7 @@ use Archive::Tar;
 plan(tests => 10);
 
 # a temp directory to put everything in
-my $temp_dir = File::Temp->tempdir('tap-archive-XXXXXXXX', CLEANUP => 1);
+my $temp_dir = File::Temp::tempdir(CLEANUP => 1);
 my @testfiles = (catfile('t', 'foo.t'), catfile('t', 'bar.t'));
 my @extra_files = (
     catfile('t', 'extra_files', 'log1.txt'),
@@ -25,11 +25,11 @@ $harness = TAP::Harness::Archive->new(
     }
 );
 $harness->runtests(@testfiles);
-ok(-e $file, 'archive.tar.gz created');
 check_archive($file);
 
 sub check_archive {
     my $archive_file = shift;
+    ok(-e $archive_file, 'archive.tar.gz created');
     my %tap_files;
     my $aggregator = TAP::Harness::Archive->aggregator_from_archive(
         {
